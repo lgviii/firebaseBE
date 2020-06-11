@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Counter;
+using Counter.Services;
+using Counter.Models;
+using Counter.Mongo;
 
 namespace FirebaseAuthBE
 {
@@ -34,13 +31,6 @@ namespace FirebaseAuthBE
                 {
                     options.IncludeErrorDetails = true;
                     options.Authority = "https://securetoken.google.com/reactauth-f1c98";
-/*                    options.Events = new JwtBearerEvents()
-                    {
-                        OnAuthenticationFailed = c =>
-                        {
-
-                        }
-                    }*/
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -59,7 +49,20 @@ namespace FirebaseAuthBE
                 });
             });
 
+            // Add services here
+            services.AddTransient<ICounterService, CounterService>();
+            services.AddScoped<ICounterRepository, CounterRepository>();
+            services.AddTransient<ICounterContext, CounterContext>();
+
             services.AddControllers();
+
+            services.Configure<MongoSettings>(
+               options =>
+               {
+                   options.ConnectionString = Configuration.GetSection("MongoDb:ConnectionString").Value;
+                   options.Database = Configuration.GetSection("MongoDb:Database").Value;
+               });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
