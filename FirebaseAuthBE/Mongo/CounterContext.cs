@@ -14,6 +14,6 @@ namespace Counter.Mongo
             _db = client.GetDatabase(options.Value.Database);
         }
 
-        public IMongoCollection<CounterInfo> CounterInfos() => _db.GetCollection<CounterInfo>("Counters");
+        public IMongoCollection<CounterInfo> CounterInfoCollection() => _db.GetCollection<CounterInfo>("Counters");
     }
 }

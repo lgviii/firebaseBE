@@ -5,6 +5,6 @@ namespace Counter.Mongo
 {
     public interface ICounterContext
     {
-        IMongoCollection<CounterInfo> CounterInfos();
+        IMongoCollection<CounterInfo> CounterInfoCollection();
     }
 }

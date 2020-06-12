@@ -13,13 +13,17 @@ namespace Counter.Services
             _counterRepository = counterRepository;
         }
 
-        public async Task AddCounter(string userId)
+        public async Task<CounterInfo> AddCounter(string userId)
         {
-            var counterInfo = new CounterInfo();
-            counterInfo.Counter = 0;
-            counterInfo.UserId = userId;
+            var counterInfo = new CounterInfo
+            {
+                Counter = 0,
+                UserId = userId
+            };
 
             await _counterRepository.AddCounter(counterInfo);
+
+            return await _counterRepository.GetCounter(userId);
         }
 
         public async Task<CounterInfo> GetCounter(string userId)
@@ -31,28 +35,10 @@ namespace Counter.Services
         {
             await _counterRepository.IncrementCounter(userId);
         }
-        /*
-       public async Task<ToDoItem[]> GetIncompleteItemsAsync()
-       {
-           //return await _context.Items.Where(a => a.IdDone == false).ToArrayAsync();
-           var result = await _toDoRepo.ListToDoItems();
-           return result.ToArray();
-       }
 
-       public async Task AddItem(ToDoItem toDoItem)
-       {
-           await _toDoRepo.AddToDoItems(toDoItem);
-       }
-
-       public async Task MarkDoneAsync(string id)
-       {
-           var item = await _toDoRepo.GetToDoItem(id);
-
-           if (item == null) return;
-
-           item.IdDone = !item.IdDone;
-
-           await _toDoRepo.UpdateToDoItem(item);
-       }*/
+        public async Task DecrementCounter(string userId)
+        {
+            await _counterRepository.DecrementCounter(userId);
+        }
     }
 }

@@ -5,8 +5,9 @@ namespace Counter.Services
 {
     public interface ICounterService
     {
-        Task IncrementCounter(string userId);
-        Task AddCounter(string userId);
+        Task<CounterInfo> AddCounter(string userId);
         Task<CounterInfo> GetCounter(string userId);
+        Task IncrementCounter(string userId);
+        Task DecrementCounter(string userId);
     }
 }

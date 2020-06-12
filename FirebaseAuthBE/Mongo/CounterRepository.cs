@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Counter.Mongo;
 using MongoDB.Driver;
 using System.Threading.Tasks;
@@ -18,14 +16,14 @@ namespace Counter.Models
 
         public async Task AddCounter(CounterInfo counterInfo)
         {
-            await _context.CounterInfos().InsertOneAsync(counterInfo);
+            await _context.CounterInfoCollection().InsertOneAsync(counterInfo);
         }
 
         public async Task<CounterInfo> GetCounter(string userId)
         {
             var filter = Builders<CounterInfo>.Filter.Where(a => a.UserId == userId);
 
-            var cursor = await _context.CounterInfos().FindAsync(filter);
+            var cursor = await _context.CounterInfoCollection().FindAsync(filter);
 
             var records = await cursor.ToListAsync();
 
@@ -42,13 +40,26 @@ namespace Counter.Models
         {
             var filter = Builders<CounterInfo>.Filter.Where(a => a.UserId == userId);
 
-            var records = await _context.CounterInfos().FindAsync(filter);
+            var records = await _context.CounterInfoCollection().FindAsync(filter);
 
-            var singleRecord = records.FirstOrDefault();
+            var singleRecord = records.First();
 
             singleRecord.Counter++;
 
-            await _context.CounterInfos().ReplaceOneAsync(filter, singleRecord, new ReplaceOptions { IsUpsert = true });
+            await _context.CounterInfoCollection().ReplaceOneAsync(filter, singleRecord, new ReplaceOptions { IsUpsert = true });
+        }
+
+        public async Task DecrementCounter(string userId)
+        {
+            var filter = Builders<CounterInfo>.Filter.Where(a => a.UserId == userId);
+
+            var records = await _context.CounterInfoCollection().FindAsync(filter);
+
+            var singleRecord = records.First();
+
+            singleRecord.Counter--;
+
+            await _context.CounterInfoCollection().ReplaceOneAsync(filter, singleRecord, new ReplaceOptions { IsUpsert = true });
         }
     }
 }
