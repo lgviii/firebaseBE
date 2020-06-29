@@ -23,6 +23,13 @@ namespace FirebaseAuthBE.Controllers
             _securityService = new SecurityService();
         }
 
+        [Route("/")]
+        [HttpGet]
+        public string DefaultIndex()
+        {
+            return "This is the index for Lin's experiment!";
+        }
+
         [Route("/Alive")]
         [HttpGet]
         public string CurrentCount()
