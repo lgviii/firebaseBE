@@ -14,6 +14,9 @@ namespace FirebaseAuthBE
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,8 +46,15 @@ namespace FirebaseAuthBE
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.AllowAnyOrigin();
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
+
+/*                options.AddPolicy(name: MyAllowSpecificOrigins,
+                              builder =>
+                              {
+                                  builder.WithOrigins("http://localhost:3000",
+                                                      "https://lgviii.com");
+                              });*/
             });
 
             // Add services here
