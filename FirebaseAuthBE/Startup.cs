@@ -48,13 +48,6 @@ namespace FirebaseAuthBE
                 {
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
-
-/*                options.AddPolicy(name: MyAllowSpecificOrigins,
-                              builder =>
-                              {
-                                  builder.WithOrigins("http://localhost:3000",
-                                                      "https://lgviii.com");
-                              });*/
             });
 
             // Add services here
