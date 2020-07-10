@@ -21,9 +21,8 @@ namespace FirebaseAuthBE
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     var debugValue = Environment.GetEnvironmentVariable("DEBUG");
-                    var isDebugMode = debugValue.ToLower() == "true";
 
-                    if (isDebugMode)
+                    if (debugValue != null)
                     {
                         webBuilder.UseStartup<Startup>();
                     }
@@ -32,8 +31,7 @@ namespace FirebaseAuthBE
                         //Heroku configa
                         var port = Environment.GetEnvironmentVariable("PORT");
 
-                        webBuilder.UseStartup<Startup>()
-                        .UseUrls("http://*:" + port);
+                        webBuilder.UseStartup<Startup>().UseUrls("http://*:" + port);
                     }
                 });
     }
